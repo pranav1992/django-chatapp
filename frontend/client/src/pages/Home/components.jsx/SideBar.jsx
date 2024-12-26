@@ -1,25 +1,33 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { IoChatbubbleEllipsesSharp } from "react-icons/io5";
 import { FaUserPlus } from "react-icons/fa";
+import { setSearchUser } from "../../../redux/slices/userSlice";
 
 const SideBar = () => {
   const user = useSelector((state) => state.user);
+  const userDispatch = useDispatch();
   let dummy = [...user.user];
   console.log(dummy);
   return (
     <div className="sidebar">
       <div className="grid grid-cols-[48px,1fr] h-full">
-
         {/* side panel options*/}
         <div className="bg-slate-200 h-full rounded-tr-lg rounded-br-lg py-5 px-2 pt-8 flex flex-col justify-between">
-        <IoChatbubbleEllipsesSharp size={30} color="black"/>
-        <FaUserPlus size={30} color="black"/>
+          <IoChatbubbleEllipsesSharp size={30} color="black" />
+          <div
+            onClick={() => {
+              userDispatch(setSearchUser());
+            }}
+          >
+            <FaUserPlus size={30} color="black" />
+          </div>
         </div>
 
+        {/* sidebar */}
         <div>
           <div className="profile-section">
-            <span >Chats</span>
+            <span>Chats</span>
             <button className="settings-button">⚙</button>
           </div>
           <div className="search-section">
