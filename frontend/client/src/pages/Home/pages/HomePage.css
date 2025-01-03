@@ -53,9 +53,18 @@ body {
     font-size: 1rem;
 }
 
+.chat-list-container {
+
+    overflow-y: auto; /* Enable vertical scrolling */
+    border: .5px  #ccc; 
+    border-radius: 3px; /* Optional: Rounded corners */
+  }
+
 .chat-list {
     flex: 1;
     overflow-y: auto;
+    display: flex;
+    flex-direction: column;
 }
 
 .chat-item {

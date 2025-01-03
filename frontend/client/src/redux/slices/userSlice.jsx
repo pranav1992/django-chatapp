@@ -10,10 +10,10 @@ export const userSlice = createSlice({
     initialState,
     reducers: {
         setUsers : (state, action) => {
-            let dummy = [...action.payload]
+            console.log(action.payload)
+            let dummy = action.payload
             state.user = dummy
         },
-
         setSearchUser : (state, action) => {
             state.searchUserOpen = !state.searchUserOpen
         }
