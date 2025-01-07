@@ -16,7 +16,6 @@ const Chatwindow = () => {
     const fetchUsers = async () => {
       try{
         const response = await fetchUser();
-        console.log(response)
         if (response.status === 200) {
           // dispatch(setUsers(response.data["user"]));
         }

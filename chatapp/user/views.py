@@ -1,4 +1,5 @@
-from rest_framework.decorators import api_view, APIView
+from rest_framework.decorators import api_view, permission_classes, APIView
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.models import User
@@ -21,22 +22,6 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
-
-class GenerateTokenView(APIView):
-    def post(self, request, *args, **kwargs):
-        user = request.user  # or fetch the user as needed
-        if user.is_authenticated:  # Ensure the user is authenticated
-            # Use the custom serializer to get the token
-            token = MyTokenObtainPairSerializer.get_token(user)
-            refresh_token = str(token)
-            access_token = str(token.access_token)
-
-            return Response({
-                'refresh': refresh_token,
-                'access': access_token,
-            })
-        return Response({'detail': 'User not authenticated'}, status=403)
-    
 
 
 @api_view(['POST'])
@@ -75,7 +60,15 @@ def log_in(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return Response({'message': 'Login successful.', 'user_id': user.id},
+            refresh_token = ""
+            access_token = ""
+            if user.is_authenticated:  # Ensure the user is authenticated
+                # Use the custom serializer to get the token
+                token = MyTokenObtainPairSerializer.get_token(user)
+                refresh_token = str(token)
+                access_token = str(token.access_token)
+            return Response({'message': 'Login successful.', 'user_id': user.id, 
+                             "access_token": access_token, "refresh_token": refresh_token},
                 status=status.HTTP_200_OK)
         else:
             return Response({'error': 'Invalid username or password.'},
@@ -87,6 +80,7 @@ def log_in(request):
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def get_users(request):
     try:  
         user = User.objects.all()
@@ -99,6 +93,7 @@ def get_users(request):
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def get_profile(request):
     try:
         user = Profile.objects.all()
@@ -112,6 +107,7 @@ def get_profile(request):
 
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def create_user(request):
     try:
         serializer = ProfileSerializer(data=request.data)

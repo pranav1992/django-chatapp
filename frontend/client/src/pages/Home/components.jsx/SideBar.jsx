@@ -5,22 +5,19 @@ import { FaUserPlus } from "react-icons/fa";
 import { setSearchUser } from "../../../redux/slices/userSlice";
 import { fetchUsersChatroom } from "../../../api";
 import { setUsers } from "../../../redux/slices/userSlice";
+import { setChatroom } from "../../../redux/slices/chatroomSlice";
 
 const SideBar = () => {
   const user = useSelector((state) => state.user);
-  const userDispatch = useDispatch();
+  const chatroom = useSelector((state)=> state.chatroom)
+  const dispatch = useDispatch();
   let dummy = [...user.user];
 
   const fetchUsers = async () => {
     try{
       const response = await fetchUsersChatroom("8de124ba-cd13-42cd-a380-29ae0661e924");
-      
       if (response.status === 200) {
-        console.log("test 1")
-        console.log(response.data)
         dispatch(setUsers(response.data));
-       
-        console.log("test")
       }
     }catch{
       console.log("something happened wrong")
@@ -63,7 +60,12 @@ const SideBar = () => {
             <div className="chat-list">
               {dummy.map((e, i) => {
                 return (
-                  <div key={i} className="chat-item">
+                  <div key={i} className="chat-item" onClick={(val)=>{
+            
+                    dispatch(setChatroom(e.chat))
+                    console.log("chatroom ==> ")
+                    console.log(chatroom)
+                    }}>
                     <img
                       src="chat-pic-url"
                       alt="Chat Profile"

@@ -7,5 +7,6 @@ const apiClient = axios.create({
 })
 
 export const fetchUser = () =>  apiClient.get("user/");
-export const fetchUsersChatroom = (id) => 
-    apiClient.get(`get_user_chat/${id}`)
+export const fetchUsersChatroom = (id) => apiClient.get(`get_user_chat/${id}`)
+export const fetchToken = (payload) => apiClient.post('user/token/refresh/',payload)
+export const fetchLogin = (payload) => apiClient.post('user/signin/', payload)

@@ -1,22 +1,23 @@
 import React from "react";
 import "./SignIn.css";
 import { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router";
+import { fetchLogin } from "../../../api/userApi";
+import { useDispatch } from "react-redux";
+import { setAuth, setuser } from "../../../redux/slices/authSlice";
+
 
 const SignIn = () => {
   let navigate = useNavigate();
+  const dispatch = useDispatch()
+
   const login = async () => {
-    const url = "http://127.0.0.1:8000/user/signin/";
-    const result = await axios({
-      method: "post",
-      url: url,
-      data: {
-        username: formData.name,
-        password: formData.password,
-      },
-    });
+    const result = await fetchLogin({
+      username: formData.name,
+      password: formData.password,
+    })
     if (result.status === 200) {
+      // dispatch(setAuth({"access_token": result.data['']}))
       navigate("/");
     }
   };
@@ -36,9 +37,7 @@ const SignIn = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission logic here
     await login();
-    // console.log('Form Data Submitted:', formData);
   };
 
   return (

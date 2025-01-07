@@ -12,7 +12,6 @@ function SeachUser() {
   const [searchedUser, setSearchedUser] = useState([]);
   const [loading, setLoading] = useState(false);
 //   const [search, setSearch] = useState("");
-
   const dispatch = useDispatch();
 
   const handleSearch = async () => {
@@ -68,7 +67,6 @@ function SeachUser() {
             )}
         </div>
       </div>
-
       <div className='absolute top-0 right-0 text-2xl p-2 lg:text-4xl hover:text-white' onClick={()=>dispatch(setSearchUser())}>
             <button>
                 <IoClose/>

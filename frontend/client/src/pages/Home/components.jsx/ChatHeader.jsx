@@ -1,6 +1,9 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 
 const ChatHeader = () => {
+
+  const chatroom = useSelector((state)=> state.chatroom)
   return (
     <div className="chat-header">
     <img
@@ -9,7 +12,7 @@ const ChatHeader = () => {
         className="chat-pic"
     />
     <div className="chat-info">
-        <h4 className="chat-name">John Doe</h4>
+        <h4 className="chat-name">{chatroom.chatroom.name}</h4>
         <p className="status">Online</p>
     </div>
 </div>
