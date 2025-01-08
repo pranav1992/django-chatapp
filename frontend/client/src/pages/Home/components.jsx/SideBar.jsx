@@ -4,11 +4,14 @@ import { IoChatbubbleEllipsesSharp } from "react-icons/io5";
 import { FaUserPlus } from "react-icons/fa";
 import { setSearchUser } from "../../../redux/slices/userSlice";
 import { fetchUsersChatroom } from "../../../api";
+import { fetchToken } from "../../../api";
 import { setUsers } from "../../../redux/slices/userSlice";
 import { setChatroom } from "../../../redux/slices/chatroomSlice";
+import { setAuth } from "../../../redux/slices/authSlice";
 
 const SideBar = () => {
   const user = useSelector((state) => state.user);
+  const useAuth = useSelector((state)=> state.auth)
   const chatroom = useSelector((state)=> state.chatroom)
   const dispatch = useDispatch();
   let dummy = [...user.user];
@@ -16,6 +19,7 @@ const SideBar = () => {
   const fetchUsers = async () => {
     try{
       const response = await fetchUsersChatroom("8de124ba-cd13-42cd-a380-29ae0661e924");
+      console.log(response.status)
       if (response.status === 200) {
         dispatch(setUsers(response.data));
       }

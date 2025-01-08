@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-
+import { jwtDecode } from "jwt-decode";
 const initialState = {
     isLoading : false,
     authToken : localStorage.getItem("authTokens") ?
@@ -10,7 +10,7 @@ const initialState = {
 }
 
 export const authSlice = createSlice({
-    name: auth,
+    name: 'auth',
     initialState,
     reducers: {
         'setuser': (state, action) => {
