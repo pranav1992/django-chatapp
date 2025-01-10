@@ -17,10 +17,7 @@ export const chatroomSlice = createSlice({
     initialState,
     reducers: {
         setChatroom: (state, action) => {
-            console.log(action.payload)
             state.chatroom = action.payload
-            console.log(state.chatroom)
-            console.log("chatroom ==>")
         }
     }
 });

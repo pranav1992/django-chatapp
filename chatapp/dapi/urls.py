@@ -12,7 +12,7 @@ urlpatterns = [
     # set chat-member to the chatroom
     path('set-chatmember/',set_chat_members),
     # get messages relative to the chatroom
-    path('get-chats-messages/', get_messages),
+    path('get-chats-messages/<str:chatId>/', get_messages),
     path('set-message/',set_message)
     
 ]

@@ -2,12 +2,12 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { IoChatbubbleEllipsesSharp } from "react-icons/io5";
 import { FaUserPlus } from "react-icons/fa";
-import { setSearchUser } from "../../../redux/slices/userSlice";
-import { fetchUsersChatroom } from "../../../api";
-import { fetchToken } from "../../../api";
-import { setUsers } from "../../../redux/slices/userSlice";
-import { setChatroom } from "../../../redux/slices/chatroomSlice";
-import { setAuth } from "../../../redux/slices/authSlice";
+import { setSearchUser } from "../redux/slices/userSlice";
+import { fetchMessages, fetchUsersChatroom } from "../api";
+import { setUsers } from "../redux/slices/userSlice";
+import { setChatroom } from "../redux/slices/chatroomSlice";
+import { setChatroomMessages } from "../redux/slices/chatMessagesSlice";
+import { useNavigate } from "react-router-dom";
 
 const SideBar = () => {
   const user = useSelector((state) => state.user);
@@ -15,11 +15,11 @@ const SideBar = () => {
   const chatroom = useSelector((state)=> state.chatroom)
   const dispatch = useDispatch();
   let dummy = [...user.user];
+  const navigate = useNavigate()
 
   const fetchUsers = async () => {
     try{
-      const response = await fetchUsersChatroom("8de124ba-cd13-42cd-a380-29ae0661e924");
-      console.log(response.status)
+      const response = await fetchUsersChatroom(useAuth.profile['id']);
       if (response.status === 200) {
         dispatch(setUsers(response.data));
       }
@@ -32,9 +32,17 @@ const SideBar = () => {
     fetchUsers();
   },[])
 
+  const onRoomClick = async(e) =>{
+    const response = await fetchMessages(e.chat.id);
+    console.log(response.data)
+    dispatch(setChatroomMessages({roomId : e.chat.id, messages: response.data}))
+    dispatch(setChatroom(e.chat)) // current chatroom
+    navigate(`/${e.chat.id}`)
+  }
+
   return (
-    <div className="sidebar">
-      <div className="grid grid-cols-[48px,1fr] h-full">
+    <div className="sidebar position: fixed">
+      <div className="grid grid-cols-[48px,1fr] h-screen">
         {/* side panel options*/}
         <div className="bg-slate-200 h-screen rounded-tr-lg rounded-br-lg py-5 px-2 pt-8 flex flex-col justify-between">
           <IoChatbubbleEllipsesSharp size={30} color="black" />
@@ -65,10 +73,7 @@ const SideBar = () => {
               {dummy.map((e, i) => {
                 return (
                   <div key={i} className="chat-item" onClick={(val)=>{
-            
-                    dispatch(setChatroom(e.chat))
-                    console.log("chatroom ==> ")
-                    console.log(chatroom)
+                    onRoomClick(e)
                     }}>
                     <img
                       src="chat-pic-url"

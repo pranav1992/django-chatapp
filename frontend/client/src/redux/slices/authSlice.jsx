@@ -5,9 +5,11 @@ const initialState = {
     authToken : localStorage.getItem("authTokens") ?
                 JSON.parse(localStorage.getItem("authTokens")) : {},
     user:       localStorage.getItem("authTokens") ?
-                jwtDecode(localStorage.getItem("authTokens")) : null
+                jwtDecode(localStorage.getItem("authTokens")) : null,
+    profile:    localStorage.getItem("profile") ? 
+                JSON.parse(localStorage.getItem('profile')) : {}
 
-}
+}   
 
 export const authSlice = createSlice({
     name: 'auth',
@@ -21,9 +23,12 @@ export const authSlice = createSlice({
         },
         'setisloading': (state, action)=>{
             state.isLoading = action.payload
-        } 
+        },
+        'setProfile': (state, action)=>{
+            state.profile = action.payload
+        }
     }
 })
-export const {setuser, setAuth, setisloading} = authSlice.actions
+export const {setuser, setAuth, setisloading, setProfile} = authSlice.actions
 export default authSlice.reducer
 

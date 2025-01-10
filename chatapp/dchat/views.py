@@ -91,9 +91,9 @@ def set_chat_members(request):
 # get messages relative to the given chat-room
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def get_messages(request):
+def get_messages(request,chatId):
     try:
-        data = Message.objects.all()
+        data = Message.objects.filter(chat=chatId)
         serializers = MessagesSerializer(data, many= True)
         return Response(serializers.data)
     except Exception as e:
@@ -111,3 +111,4 @@ def set_message(request):
     except Exception as e:
         return Response({"error": str(e)},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    

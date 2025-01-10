@@ -7,7 +7,7 @@ from rest_framework_simplejwt.views import (
 
 urlpatterns = [
     path('', get_users), # Get all users
-    path('get-profile/', get_profile), # Get all profiles
+    path('get-profile/<str:id>/', get_profile), # Get all profiles
     path('create-user/', create_user), 
     path('signup/', register_user),
     path('signin/',log_in ),

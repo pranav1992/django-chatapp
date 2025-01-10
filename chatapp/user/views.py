@@ -67,7 +67,9 @@ def log_in(request):
                 token = MyTokenObtainPairSerializer.get_token(user)
                 refresh_token = str(token)
                 access_token = str(token.access_token)
-            return Response({'message': 'Login successful.', 'user_id': user.id, 
+                profile = Profile.objects.get(user = user.id) 
+                userProfile = ProfileSerializer(profile, many=False)   
+            return Response({'message': 'Login successful.', 'user_id': user.id, 'profile': userProfile.data,
                              "access_token": access_token, "refresh_token": refresh_token},
                 status=status.HTTP_200_OK)
         else:
@@ -94,11 +96,11 @@ def get_users(request):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def get_profile(request):
+def get_profile(request, id):
     try:
-        user = Profile.objects.all()
-        serialize = ProfileSerializer(user, many= True)
-        return Response({'user': serialize.data})
+        user = Profile.objects.get(user=id)
+        serialize = ProfileSerializer(user, many= False)
+        return Response(serialize.data)
     
     except Exception as e:
         return Response({'error': str(e)}, 

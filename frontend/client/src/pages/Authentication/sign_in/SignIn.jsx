@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import { fetchLogin } from "../../../api/loginApi";
 import { useDispatch, useSelector } from "react-redux";
-import { setAuth, setuser } from "../../../redux/slices/authSlice";
+import { setAuth, setuser , setProfile} from "../../../redux/slices/authSlice";
 import { jwtDecode } from "jwt-decode";
 
 const SignIn = () => {
@@ -18,16 +18,18 @@ const SignIn = () => {
       username: formData.name,
       password: formData.password,
     })
+    console.log(result)
     if (result.status === 200) {
-      // console.log(result)
       const authCred =  {
         "access_token": result.data['access_token'], 
         "refresh_token": result.data["refresh_token"]
       }
       dispatch(setAuth(authCred))
       dispatch(setuser(jwtDecode(result.data['access_token'])))
+      dispatch(setProfile(result.data["profile"]))
+
+      localStorage.setItem("profile", JSON.stringify(result.data["profile"]))
       localStorage.setItem("authTokens", JSON.stringify(authCred))
-      console.log(select)
       navigate("/");
     }
   };
